@@ -1,0 +1,84 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(moments)
+library(skimr)
+```
+
+```{r}
+dbt_data <- readr::read_csv("diabetic_data.csv")
+ids <- readr::read_csv("IDs_mapping.csv")
+```
+
+```{r}
+View(dbt_data)
+```
+
+```{r}
+View(ids)
+```
+
+```{r}
+#find the nos of missing values in the dataset for each columns
+colSums(is.na(dbt_data))
+```
+
+```{r}
+summary(dbt_data)
+
+```
+
+```{r}
+skim(dbt_data)
+```
+
+```{r}
+# dbt_data %>% mutate(race = na_if(race, "?"), replace_na = TRUE)
+```
+
+```{r}
+# converting missing values (?) to NAs
+dbt_data <- dbt_data %>% mutate(across(where(is.character), ~na_if(., "?")))
+
+```
+
+```{r}
+# missing values
+sum(is.na(dbt_data))
+```
+
+## Data Transformation and Cleaning
+
+```{r}
+discharge <- data.frame(ids[11:40, ]) # create the dataframe
+colnames(discharge) <- c('discharge_disposition_id', 'description') # change the colnames
+View(discharge)
+```
+
+```{r}
+admission_source <- data.frame(ids[43:67, ]) # create the dataframe for the split
+colnames(admission_source) <- c('admission_source_id', 'description') # change the colnames
+```
+
+```{r}
+admission_type <- data.frame(ids[1:8, ]) # create the dataframe
+```
+
+```{r}
+write.csv(discharge, "discharge_disposition.csv")
+
+```
+
+```{r}
+write.csv(admission_source, "admission_source.csv")
+write.csv(admission_type, "admission_type.csv")
+```
+
+```{r}
+
+```
